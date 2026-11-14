@@ -73,7 +73,7 @@ textarea{min-height:112px}pre{max-height:120px;font-size:.8rem}
 <div class="card" id="card"></div>
 </main>
 <script>
-const P1="💌 Part 1 · Essentials",P2="🌷 Part 2 · About you",P3="💼 Part 3 · Work, study and money",P4="💞 Part 4 · Relationship and family",P5="🌸 Part 5 · Lifestyle and personality",P6="✨ Part 6 · In your own words",P7="💍 Part 7 · Declaration";
+const P1="💌 Part 1 · Essentials",P2="🌷 Part 2 · About you",P3="💼 Part 3 · Work, study and money",P4="💞 Part 4 · Relationship, family and future",P5="🌸 Part 5 · Lifestyle and personality",P6="✨ Part 6 · In your own words",P7="💍 Part 7 · Declaration";
 const yn=(p,t,y,n,h)=>({p,t,k:"yn",y,n,h});
 const tx=(p,t,nx,h,big,opt)=>({p,t,k:big?"ta":"tx",nx,h,opt});
 const Q={
@@ -107,8 +107,13 @@ const Q={
 "23":yn(P4,"Do you get along with your own family?","25","24"),
 "24":tx(P4,"Please explain in your own words.","25","",1),
 "25":yn(P4,"Are you open to meeting my family?","25A","STOP"),
-"25A":yn(P4,"When I marry, I hope to stay married for life and I do not want a divorce. Do you share this hope for marriage?","26","25B","I take marriage seriously. I want a lasting, loving marriage built on trust and respect."),
-"25B":tx(P4,"Please tell me, in your own words, how you see marriage and what a lasting marriage means to you.","26","",1),
+"25A":yn(P4,"When I marry, I hope to stay married for life and I do not want a divorce. Do you share this hope for marriage?","F1","25B","I take marriage seriously. I want a lasting, loving marriage built on trust and respect."),
+"25B":tx(P4,"Please tell me, in your own words, how you see marriage and what a lasting marriage means to you.","F1","",1),
+"F1":yn(P4,"I want to live in the United Kingdom for my entire life. Do you see your future in the UK too?","F2","F1A","I love living in the UK, and I would like our shared future to be here 🇬🇧"),
+"F1A":tx(P4,"Please tell me about your plans for where you want to live.","F2","",1),
+"F2":yn(P4,"Do you want to live in a warm country?","STOP","F3","**My note:** even though I like warm countries, I do not want to emigrate. I love living in the UK. Warm holidays together would be lovely 🌴"),
+"F3":yn(P4,"Are you comfortable taking our time before marriage?","26","F3A","I do not rush into marriage. I plan to finish my degree and have a stable job first, get to know my partner for at least one year, and meet each other’s families before we decide."),
+"F3A":tx(P4,"Please tell me, in your own words, how you see the timeline.","26","",1),
 "26":yn(P4,"Do you want children in the future?","27","28"),
 "27":tx(P4,"How many children would you like, and what kind of parent do you want to be?","29","I generally want two and can be flexible.",1),
 "28":tx(P4,"Please explain your reasons in your own words.","29","",1),
@@ -172,7 +177,7 @@ function profile(){
   const t=el("div","pinfo");t.append(el("h2",null,"Hello, I’m Emre 👋"),el("p","pr","Working student · BSc Computer Science"),el("p","hint","Tap my photo to enlarge 📸"));
   w.append(im,t);
   const d=document.createElement("details");d.className="more";const sm=document.createElement("summary");sm.textContent="More about me 💕";d.append(sm);
-  [["Full name","Emre Karoglu"],["Studies","BSc in Computer Science with Foundation Year"],["Favourite food","Pizza Margherita 🍕"],["Eyes","Hazel"],["Hair","Light brown"],["Ethnicity","White"],["Lives","South Essex (Chafford Hundred)"],["Outdoors","8-ball pool, badminton, paddleboarding"]].forEach(([k,v])=>{const r=el("p","pr"),a=el("b",null,k+": ");r.append(a,v);d.append(r)});
+  [["Full name","Emre Karoglu"],["Studies","BSc in Computer Science with Foundation Year"],["Favourite food","Pizza Margherita 🍕"],["Eyes","Hazel"],["Hair","Light brown"],["Ethnicity","White"],["Lives","South Essex (Chafford Hundred)"],["Future","Living in the UK for life 🇬🇧"],["Outdoors","8-ball pool, badminton, paddleboarding"]].forEach(([k,v])=>{const r=el("p","pr"),a=el("b",null,k+": ");r.append(a,v);d.append(r)});
   d.append(el("p","hint","I value honesty, loyalty and kindness, I hope for one lasting marriage, and I love quiet weekends at home. Attraction matters to me, but so do trust, communication, compatibility and respect 💕"));
   box.append(w,d);return box;
 }
