@@ -69,6 +69,7 @@ textarea{min-height:112px}pre{max-height:120px;font-size:.8rem}
 .calc{font:inherit;border:2px solid transparent;background:var(--fld);color:var(--ink);border-radius:10px;padding:7px 0;cursor:pointer}.calc:disabled{opacity:.25;background:transparent;cursor:default}.calc.sel{background:var(--acc);color:var(--acc2);font-weight:700}
 .chip:disabled{opacity:.5;text-decoration:line-through;cursor:default}
 .sub{display:none}h1{font-size:1.5rem;margin:0 0 8px}main{padding-top:10px}.opts.c{gap:6px}.opts.c .opt{padding:9px 14px}.row .btn{padding:10px 14px}
+input[type=date]{min-width:0;max-width:100%;display:block;-webkit-appearance:none;appearance:none;min-height:52px}
 </style>
 </head>
 <body>
@@ -80,70 +81,48 @@ textarea{min-height:112px}pre{max-height:120px;font-size:.8rem}
 <div class="card" id="card"></div>
 </main>
 <script>
-const P1="💌 Part 1 · Essentials",P2="🌷 Part 2 · About you",P3="💼 Part 3 · Work, study and money",P4="💞 Part 4 · Relationship, family and future",P5="🌸 Part 5 · Lifestyle and personality",P6="✨ Part 6 · In your own words",P7="💍 Part 7 · Declaration",P8="📅 Part 8 · Let’s talk";
+const P1="💌 Part 1 · Essentials",P2="🌷 Part 2 · About you",P3="💼 Part 3 · Work, study and money",P4="💞 Part 4 · Relationship, family and future",P5="🌸 Part 5 · Lifestyle and personality",P6="✨ Part 6 · In your own words",P7="💌 Part 7 · Your details",P8="💍 Part 8 · Declaration";
 const yn=(p,t,y,n,h)=>({p,t,k:"yn",y,n,h});
 const tx=(p,t,nx,h,big,opt)=>({p,t,k:big?"ta":"tx",nx,h,opt});
 const Q={
 "1":yn(P1,"Are you between 21 and 27 years old?","2","STOP","I prefer someone close to my own age. I am 23."),
 "2":yn(P1,"Are you a British citizen with a valid United Kingdom passport?","3","STOP"),
 "3":yn(P1,"Do you currently live in the United Kingdom?","4","STOP"),
-"4":yn(P1,"Do you live in London, in South Essex, or within easy travelling distance of Chafford Hundred?","6","5","I live near London, in South Essex (Chafford Hundred). I would like to meet someone who lives close to me, so that we can really get to know each other."),
-"5":tx(P1,"Where do you live, and roughly how long would it take you to travel to Chafford Hundred?","6","",1),
-"6":yn(P1,"Do you smoke?","STOP","7"),
+"4":yn(P1,"Do you live in London, in South Essex, or within easy travelling distance of Chafford Hundred?","6","4D","I live near London, in South Essex (Chafford Hundred). I would like to meet someone who lives close to me, so that we can really get to know each other."),
+"4D":tx(P1,"Where do you live, and roughly how long would it take you to travel to Chafford Hundred?","6","",1),
+"6":yn(P1,"Do you smoke or vape?","STOP","7"),
 "7":yn(P1,"Do you already have a child?","STOP","8"),
-"8":yn(P1,"Have you been married before?","9","10"),
-"9":tx(P1,"When did you marry, and how did the marriage end?","10","",1),
-"10":yn(P1,"Do you promise to be honest, to be loyal to one partner, and never to cheat, lie or steal?","10T","STOP"),
-"10T":yn(P1,"Have you ever been involved in theft, burglary or similar activity?","STOP","10A"),
-"10A":{p:P1,t:"How would you describe your ethnic background?",k:"ch",h:"Essential. **I prefer white women.** This is only about who I am personally attracted to, not a judgement of anyone\u2019s worth, culture or character. If this is not a match for you, I fully understand and I wish you every happiness.",o:[["White","11"],["Mixed or multiple ethnic groups","11"],["Asian or Asian British","11"],["Black, African, Caribbean or Black British","11"],["Other ethnic group","11"]]},
-"11":{p:P2,t:"Your details",k:"form",nx:"12",f:[["Full name","text",1],["Date of birth","date",1],["Email address","email",1],["Phone number","tel",1]]},
-"12":tx(P2,"What is your natural hair colour?","13","Blonde / Ginger / Other (please write it)"),
-"13":tx(P2,"What is your natural eye colour?","14","Blue / Green / Hazel / Other (please write it)"),
-"14":yn(P3,"Are you currently working?","15","16"),
-"15":tx(P3,"Job title, employer and weekly hours. Tell me more about your work if you wish.","17","",1),
-"16":tx(P3,"What are you doing instead (studying, looking for work, or something else), and when do you expect to start work or study?","18","",1),
-"17":yn(P3,"Are you also studying?","17A","18"),
-"17A":tx(P3,"Your course, institution and expected finish date","18","",1),
-"18":tx(P3,"What are your career plans and your life plan for the next five to ten years?","18A","",1),
-"18A":tx(P3,"What is your highest qualification, and what is your profession or field?","19","",1),
-"19":yn(P3,"Are you financially independent?","21","20"),
-"20":tx(P3,"How are you working towards becoming financially independent?","21","",1),
-"21":tx(P3,"How do you manage your money (savings, spending, any debts)?","21A","",1),
-"21A":tx(P3,"How do you imagine sharing responsibilities and money in a relationship?","22","",1),
+"8":yn(P1,"Have you been married before?","10","10"),
+"10":yn(P1,"Do you promise to be honest, to be loyal to one partner, and never to cheat, lie or steal?","10A","STOP"),
+"10A":{p:P1,t:"How would you describe your ethnic background?",k:"ch",h:"Essential. **I prefer white women.** This is only about who I am personally attracted to, not a judgement of anyone\u2019s worth, culture or character. If this is not a match for you, I fully understand and I wish you every happiness.",o:[["White","S1"],["Mixed or multiple ethnic groups","S1"],["Asian or Asian British","S1"],["Black, African, Caribbean or Black British","S1"],["Other ethnic group","S1"]]},
+"S1":yn(P1,"Are you currently single and not seeing anyone?","12","STOP","I would like our relationship to start honestly, with only the two of us."),
+"11":{p:P7,t:"Your details",k:"form",nx:"40",h:"So that I can reply to you, please share your contact details. Use the calendar for your date of birth. Applicants are 21 to 27 years old.",f:[["Full name","text",1],["Date of birth","date",1],["Email address","email",1],["Phone number","tel",1]]},
+"12":{p:P2,t:"What is your natural hair colour?",k:"ch",o:[["Blonde","13"],["Ginger","13"],["Other","13"]]},
+"13":{p:P2,t:"What is your natural eye colour?",k:"ch",o:[["Blue","14"],["Green","14"],["Hazel","14"],["Other","14"]]},
+"14":yn(P3,"Are you currently working or studying?","19","14D"),
+"14D":tx(P3,"What are you doing at the moment, and what are your plans?","19","",1),
+"18":yn(P3,"Do you have a clear career and life plan?","21","21"),
+"19":yn(P3,"Are you financially independent?","18","18"),
+"21":yn(P3,"Are you responsible with money, for example saving and spending wisely?","22","22"),
 "22":yn(P4,"Are you looking for a genuine, mutually loving and committed relationship?","23","STOP"),
-"23":yn(P4,"Do you get along with your own family?","25","24"),
-"24":tx(P4,"Please explain in your own words.","25","",1),
+"23":yn(P4,"Do you get along with your own family?","25","25"),
 "25":yn(P4,"Are you open to meeting my family?","25A","STOP"),
-"25A":yn(P4,"When I marry, I hope to stay married for life and I do not want a divorce. Do you share this hope for marriage?","F1","25B","I take marriage seriously. I want a lasting, loving marriage built on trust and respect."),
-"25B":tx(P4,"Please tell me, in your own words, how you see marriage and what a lasting marriage means to you.","F1","",1),
-"F1":yn(P4,"I want to live in the United Kingdom for my entire life. Do you see your future in the UK too?","F2","F1A","I love living in the UK, and I would like our shared future to be here 🇬🇧"),
-"F1A":tx(P4,"Please tell me about your plans for where you want to live.","F2","",1),
+"25A":yn(P4,"When I marry, I hope to stay married for life and I do not want a divorce. Do you share this hope for marriage?","F1","F1","I take marriage seriously. I want a lasting, loving marriage built on trust and respect."),
+"F1":yn(P4,"I want to live in the United Kingdom for my entire life. Do you see your future in the UK too?","F2","F2","I love living in the UK, and I would like our shared future to be here 🇬🇧"),
 "F2":yn(P4,"Do you want to live in a warm country?","STOP","F3","**My note:** even though I like warm countries, I do not want to emigrate. I love living in the UK. Warm holidays together would be lovely 🌴"),
-"F3":yn(P4,"Are you comfortable taking our time before marriage?","26","F3A","I do not rush into marriage. I plan to finish my degree and have a stable job first, get to know my partner for at least one year, and meet each other’s families before we decide."),
-"F3A":tx(P4,"Please tell me, in your own words, how you see the timeline.","26","",1),
-"26":yn(P4,"Do you want children in the future?","27","STOP"),
-"27":tx(P4,"How many children would you like, and what kind of parent do you want to be?","H1","I would like at least two children, and possibly more, but not fewer.",1),
+"F3":yn(P4,"Are you comfortable taking our time before marriage?","26","26","I do not rush into marriage. I plan to finish my degree and have a stable job first, get to know my partner for at least one year, and meet each other’s families before we decide."),
+"26":yn(P4,"Would you like two or more children?","H1","STOP","I would like at least two children, and possibly more, but not fewer."),
 "H1":{p:P4,t:"What type of property do you live in?",k:"ch",h:"I would love to live in a detached house, which has no shared walls and gives a family plenty of space. **I would like at least two children**, and possibly more, but not fewer. If we want more than two children, a flat is usually not the best option.",o:[["Flat","STOP"],["Terraced house","H2"],["Semi-detached house","H2"],["Detached house","H2"],["Other","H2"]]},
-"H2":tx(P4,"How many bedrooms does it have?","29","",0),
-"29":{p:P5,t:"How often do you drink alcohol?",k:"ch",h:"**I prefer someone who does not drink**, but small amounts would be fine.",o:[["Never","31"],["Small amounts occasionally","30"],["Often or as a regular habit","STOP"]]},
-"30":tx(P5,"How often and how much do you usually drink?","31","",1),
+"H2":{p:P4,t:"How many bedrooms does it have?",k:"ch",o:[["1","29"],["2","29"],["3","29"],["4 or more","29"]]},
+"29":{p:P5,t:"How often do you drink alcohol?",k:"ch",h:"**I prefer someone who does not drink**, but small amounts would be fine.",o:[["Never","31"],["Small amounts occasionally","31"],["Often or as a regular habit","STOP"]]},
 "31":yn(P5,"Is your English at least fluent?","31A","STOP"),
-"31A":{p:P5,t:"Do you have a car or hold a full UK driving licence?",k:"ch",h:"**I prefer someone who has a car and a full UK driving licence.** This helps me understand how we could travel and meet.",o:[["I have a car","32"],["I hold a full UK driving licence","32"],["Both","32"],["Neither","32"]]},
-"32":tx(P5,"Describe your personality in your own words.","33","For example friendly, kind, respectful, understanding, affectionate.",1),
-"33":tx(P5,"Which three values matter most to you, and how do you treat other people?","33A","",1),
-"33A":tx(P5,"What does trust mean to you, and how do you handle disagreements?","34","",1),
-"34":tx(P5,"What are your hobbies, and which one could we share?","34A","",1),
-"34A":tx(P5,"What does your ideal weekend look like? I enjoy quiet weekends at home.","M1","",1),
-"M1":{p:P5,t:"Do you or anyone in your close family have a long-term medical condition?",k:"ch",h:"Essential. I ask only so that we can be open and honest with each other. There is none in my family, and I have no allergies. Please share only what you are comfortable with.",o:[["No","M2"],["Yes","M1A"]]},
-"M1A":tx(P5,"If you are comfortable, please tell me briefly.","M2","",1,1),
+"31A":yn(P5,"Do you have a car or a full UK driving licence?","34","34","**I prefer someone who has a car and a full UK driving licence.** This helps me understand how we could travel and meet."),
+"34":{p:P5,t:"Which hobby could we share?",k:"ch",o:[["Badminton","H4"],["8-ball pool","H4"],["Paddleboarding","H4"],["Gym","H4"],["Cooking","H4"],["Movies","H4"],["Something else","H4"]]},
+"H4":{p:P5,t:"Which superpower would you choose?",k:"ch",h:"I would choose to fly, because I prefer to be seen by everyone ✨",o:[["Flying","M1"],["Invisibility","M1"]]},
+"M1":{p:P5,t:"Do you or anyone in your close family have a long-term medical condition?",k:"ch",h:"Essential. I ask only so that we can be open and honest with each other. There is none in my family, and I have no allergies. Please share only what you are comfortable with.",o:[["No","M2"],["Yes","M2"]]},
 "M2":yn(P5,"Do you have any allergies?","STOP","M3","**I have no allergies**, and I would like my partner to have none too."),
-"M3":tx(P5,"What is your favourite food? 🍕","35","",0),
-"35":tx(P6,"What kind of relationship and daily life do you imagine with a partner?","36","Optional. Write as much as you like.",1,1),
-"36":tx(P6,"What matters most to you in a partner, and what would you never compromise on?","37","Optional.",1,1),
-"37":tx(P6,"What do you think about my requirements? Is there anything you agree with, disagree with, or would like to discuss?","38","Optional.",1,1),
-"38":tx(P6,"What are your own goals, dreams and values for the future?","39","Optional.",1,1),
-"39":tx(P6,"Is there anything else you want me to know, or any questions you would like to ask me?","40","Optional.",1,1),
-"40":yn(P7,"I confirm that my answers are true. I understand I may be asked further questions, and that this application does not guarantee a relationship.","DONE","STOP")
+"M3":{p:P5,t:"What is your favourite food? 🍕",k:"ch",o:[["Pizza","11"],["Pasta","11"],["Burgers","11"],["Sushi","11"],["Steak","11"],["Something else","11"]]},
+"40":yn(P8,"I confirm that my answers are true. I understand I may be asked further questions, and that this application does not guarantee a relationship.","DONE","STOP")
 };
 // Booked meeting slots, shown with an X. Add one per booking, like "2026-11-21|4:00pm".
 const BOOKED=[];
@@ -189,7 +168,7 @@ function render(){
   if(cur==="STOP")return stop();
   if(cur==="DONE")return done();
   const q=Q[cur];
-  card.append(el("p","part",q.p),el("p","q",(/^\d/.test(cur)?"Q"+cur+". ":"")+q.t));
+  card.append(el("p","part",q.p),el("p","q",q.t));
   if(q.h)card.append(rich(q.h));
   const err=el("p","err");
   const nav=(next)=>{const r=el("div","row");if(hist.length){const b=el("button","btn","← Back");b.onclick=back;r.append(b)}if(next)r.append(next);card.append(r,err)};
@@ -208,9 +187,87 @@ function render(){
     b.onclick=()=>{if(!iso0||!tm||BOOKED.includes(iso0+"|"+tm)){err.textContent="Please choose a weekend date and a time.";return}A[cur]={"Day":new Date(iso0+"T00:00:00").toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),"Time (UK time)":tm,_iso:iso0};go(q.nx)};
     nav(b);
   }else if(q.k==="form"){
-    const fs=q.f.map(([l,ty,rq])=>{const w=el("div");w.style.marginBottom="12px";w.append(el("p","hint",l));const i=el("input");i.type=ty;if(ty==="date"){i.max=maxDob();i.min=minDob()}i.value=(A[cur]||{})[l]||"";w.append(i);card.append(w);return[l,i,rq]});
+    const form=el("form");
+    form.setAttribute("autocomplete","on");
+    form.onsubmit=e=>{e.preventDefault();b.click()};
+
+    const fieldMeta={
+      "Full name":{name:"name",id:"full-name",ac:"name",ph:"e.g. Jane Smith"},
+      "Date of birth":{name:"bday",id:"bday",ac:"bday",ph:""},
+      "Email address":{name:"email",id:"email",ac:"email",ph:"e.g. jane@example.com"},
+      "Phone number":{name:"tel",id:"tel",ac:"tel",ph:"e.g. 07700 900000"}
+    };
+
+    const canPick=("contacts" in navigator && "select" in navigator.contacts);
+    const fillBtn=el("button","btn",canPick?"✨ Auto-fill from my phone":"✨ Tap a box below to auto-fill from phone");
+    fillBtn.type="button";
+    fillBtn.style.cssText="width:100%;margin-bottom:14px;border-style:dashed;border-color:var(--acc);font-weight:600";
+
+    let inputsByLabel={};
+    fillBtn.onclick=async()=>{
+      err.textContent="";
+      if(canPick){
+        try{
+          const props=await navigator.contacts.getProperties();
+          const wanted=["name","email","tel"].filter(p=>props.includes(p));
+          const contacts=await navigator.contacts.select(wanted,{multiple:false});
+          if(contacts&&contacts.length){
+            const c=contacts[0];
+            if(c.name&&c.name[0]&&inputsByLabel["Full name"])inputsByLabel["Full name"].value=c.name[0];
+            if(c.email&&c.email[0]&&inputsByLabel["Email address"])inputsByLabel["Email address"].value=c.email[0];
+            if(c.tel&&c.tel[0]&&inputsByLabel["Phone number"])inputsByLabel["Phone number"].value=c.tel[0];
+            fillBtn.textContent="✅ Filled! Please check your details & Date of birth";
+          }
+          return;
+        }catch(e){
+          if(e&&e.name==="AbortError")return;
+        }
+      }
+      const firstEmpty=Object.values(inputsByLabel).find(inp=>!inp.value)||inputsByLabel["Full name"];
+      if(firstEmpty)firstEmpty.focus();
+      err.style.color="var(--mut)";
+      err.textContent="Tap your contact suggestion above your phone’s keyboard to fill automatically.";
+    };
+    form.append(fillBtn);
+
+    const fs=q.f.map(([l,ty,rq])=>{
+      const w=el("div");w.style.marginBottom="12px";
+      const meta=fieldMeta[l]||{name:l.toLowerCase().replace(/\s+/g,"-"),id:l.toLowerCase().replace(/\s+/g,"-"),ac:"on",ph:""};
+      const lbl=el("label","hint",l);lbl.htmlFor=meta.id;lbl.style.display="block";
+      w.append(lbl);
+      const i=el("input");
+      i.type=ty;
+      i.id=meta.id;
+      i.name=meta.name;
+      i.autocomplete=meta.ac;
+      if(meta.ph)i.placeholder=meta.ph;
+      if(ty==="email")i.inputMode="email";
+      if(ty==="tel")i.inputMode="tel";
+      if(ty==="date"){i.max=maxDob();i.min=minDob()}
+      i.value=(A[cur]||{})[l]||"";
+      w.append(i);
+      form.append(w);
+      inputsByLabel[l]=i;
+      return[l,i,rq];
+    });
+
+    card.append(form);
     const b=el("button","btn pri","Next 💕");
-    b.onclick=()=>{const o={};for(const[l,i,rq]of fs){const v=i.value.trim();if(rq&&!v){err.textContent="Please fill in: "+l;return}if(ty0(l)==="date"&&(v>maxDob()||v<minDob())){err.textContent="Applicants must be between 21 and 27 years old.";return}if(l.startsWith("Phone")&&v.replace(/\D/g,"").length<7){err.textContent="Please enter a valid phone number.";return}if(l.startsWith("Email")&&!/^\S+@\S+\.\S+$/.test(v)){err.textContent="Please enter a valid email address.";return}o[l]=v}A[cur]=o;go(q.nx)};nav(b);
+    b.type="button";
+    b.onclick=()=>{
+      err.style.color="var(--bad)";
+      const o={};
+      for(const[l,i,rq]of fs){
+        const v=i.value.trim();
+        if(rq&&!v){err.textContent="Please fill in: "+l;return}
+        if(ty0(l)==="date"&&(v>maxDob()||v<minDob())){err.textContent="Applicants must be between 21 and 27 years old.";return}
+        if(l.startsWith("Phone")&&v.replace(/\D/g,"").length<7){err.textContent="Please enter a valid phone number.";return}
+        if(l.startsWith("Email")&&!/^\S+@\S+\.\S+$/.test(v)){err.textContent="Please enter a valid email address.";return}
+        o[l]=v;
+      }
+      A[cur]=o;go(q.nx);
+    };
+    nav(b);
   }else{
     const f=q.k==="ta"?el("textarea"):el("input");if(q.k!=="ta")f.type="text";
     f.value=A[cur]||"";f.setAttribute("aria-label",q.t);card.append(f);
