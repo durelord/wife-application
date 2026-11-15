@@ -68,6 +68,7 @@ textarea{min-height:112px}pre{max-height:120px;font-size:.8rem}
 .calg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.cald{text-align:center;font-size:.72rem;color:var(--mut)}
 .calc{font:inherit;border:2px solid transparent;background:var(--fld);color:var(--ink);border-radius:10px;padding:7px 0;cursor:pointer}.calc:disabled{opacity:.25;background:transparent;cursor:default}.calc.sel{background:var(--acc);color:var(--acc2);font-weight:700}
 .chip:disabled{opacity:.5;text-decoration:line-through;cursor:default}
+.sub{display:none}h1{font-size:1.5rem;margin:0 0 8px}main{padding-top:10px}.opts.c{gap:6px}.opts.c .opt{padding:9px 14px}.row .btn{padding:10px 14px}
 </style>
 </head>
 <body>
@@ -94,7 +95,7 @@ const Q={
 "9":tx(P1,"When did you marry, and how did the marriage end?","10","",1),
 "10":yn(P1,"Do you promise to be honest, to be loyal to one partner, and never to cheat, lie or steal?","10T","STOP"),
 "10T":yn(P1,"Have you ever been involved in theft, burglary or similar activity?","STOP","10A"),
-"10A":{p:P1,t:"How would you describe your ethnic background?",k:"ch",h:"Essential. I want to be open and honest with you: **I prefer white women.** This is only about who I am personally attracted to. It is not a judgement of anyone\u2019s worth, culture or character, and I respect everyone equally. If this is not a match for you, I fully understand and I wish you every happiness. Please choose one.",o:[["White","11"],["Mixed or multiple ethnic groups","11"],["Asian or Asian British","11"],["Black, African, Caribbean or Black British","11"],["Other ethnic group","11"]]},
+"10A":{p:P1,t:"How would you describe your ethnic background?",k:"ch",h:"Essential. **I prefer white women.** This is only about who I am personally attracted to, not a judgement of anyone\u2019s worth, culture or character. If this is not a match for you, I fully understand and I wish you every happiness.",o:[["White","11"],["Mixed or multiple ethnic groups","11"],["Asian or Asian British","11"],["Black, African, Caribbean or Black British","11"],["Other ethnic group","11"]]},
 "11":{p:P2,t:"Your details",k:"form",nx:"12",f:[["Full name","text",1],["Date of birth","date",1],["Email address","email",1],["Phone number","tel",1]]},
 "12":tx(P2,"What is your natural hair colour?","13","Blonde / Ginger / Other (please write it)"),
 "13":tx(P2,"What is your natural eye colour?","14","Blue / Green / Hazel / Other (please write it)"),
@@ -124,7 +125,7 @@ const Q={
 "27":tx(P4,"How many children would you like, and what kind of parent do you want to be?","H1","I would like at least two children, and possibly more, but not fewer.",1),
 "H1":{p:P4,t:"What type of property do you live in?",k:"ch",h:"I would love to live in a detached house, which has no shared walls and gives a family plenty of space. **I would like at least two children**, and possibly more, but not fewer. If we want more than two children, a flat is usually not the best option.",o:[["Flat","STOP"],["Terraced house","H2"],["Semi-detached house","H2"],["Detached house","H2"],["Other","H2"]]},
 "H2":tx(P4,"How many bedrooms does it have?","29","",0),
-"29":{p:P5,t:"How often do you drink alcohol?",k:"ch",o:[["Never","31"],["Small amounts occasionally","30"],["Often or as a regular habit","STOP"]]},
+"29":{p:P5,t:"How often do you drink alcohol?",k:"ch",h:"**I prefer someone who does not drink**, but small amounts would be fine.",o:[["Never","31"],["Small amounts occasionally","30"],["Often or as a regular habit","STOP"]]},
 "30":tx(P5,"How often and how much do you usually drink?","31","",1),
 "31":yn(P5,"Is your English at least fluent?","31A","STOP"),
 "31A":{p:P5,t:"Do you have a car or hold a full UK driving licence?",k:"ch",h:"**I prefer someone who has a car and a full UK driving licence.** This helps me understand how we could travel and meet.",o:[["I have a car","32"],["I hold a full UK driving licence","32"],["Both","32"],["Neither","32"]]},
@@ -132,7 +133,11 @@ const Q={
 "33":tx(P5,"Which three values matter most to you, and how do you treat other people?","33A","",1),
 "33A":tx(P5,"What does trust mean to you, and how do you handle disagreements?","34","",1),
 "34":tx(P5,"What are your hobbies, and which one could we share?","34A","",1),
-"34A":tx(P5,"What does your ideal weekend look like? I enjoy quiet weekends at home.","35","",1),
+"34A":tx(P5,"What does your ideal weekend look like? I enjoy quiet weekends at home.","M1","",1),
+"M1":{p:P5,t:"Do you or anyone in your close family have a long-term medical condition?",k:"ch",h:"Essential. I ask only so that we can be open and honest with each other. There is none in my family, and I have no allergies. Please share only what you are comfortable with.",o:[["No","M2"],["Yes","M1A"]]},
+"M1A":tx(P5,"If you are comfortable, please tell me briefly.","M2","",1,1),
+"M2":yn(P5,"Do you have any allergies?","STOP","M3","**I have no allergies**, and I would like my partner to have none too."),
+"M3":tx(P5,"What is your favourite food? 🍕","35","",0),
 "35":tx(P6,"What kind of relationship and daily life do you imagine with a partner?","36","Optional. Write as much as you like.",1,1),
 "36":tx(P6,"What matters most to you in a partner, and what would you never compromise on?","37","Optional.",1,1),
 "37":tx(P6,"What do you think about my requirements? Is there anything you agree with, disagree with, or would like to discuss?","38","Optional.",1,1),
@@ -188,7 +193,7 @@ function render(){
   const err=el("p","err");
   const nav=(next)=>{const r=el("div","row");if(hist.length){const b=el("button","btn","← Back");b.onclick=back;r.append(b)}if(next)r.append(next);card.append(r,err)};
   if(q.k==="yn"||q.k==="ch"){
-    const list=q.k==="yn"?[["Yes",q.y],["No",q.n]]:q.o,box=el("div","opts");
+    const list=q.k==="yn"?[["Yes",q.y],["No",q.n]]:q.o,box=el("div","opts"+((q.k==="yn"?2:q.o.length)>3?" c":""));
     list.forEach(([l,to])=>{const b=el("button","opt"+(A[cur]===l?" sel":""),(l==="Yes"?"💖 ":l==="No"?"🌸 ":"")+l);b.onclick=()=>{if(lock)return;A[cur]=l;go(to)};box.append(b)});
     card.append(box);nav();
   }else if(q.k==="sched"){
@@ -220,7 +225,7 @@ function profile(){
   const t=el("div","pinfo");t.append(el("h2",null,"Hello, I’m Emre 👋"),el("p","pr","Working student · BSc Computer Science"),el("p","hint","Tap my photo to enlarge 📸"));
   w.append(im,t);
   const d=document.createElement("details");d.className="more";const sm=document.createElement("summary");sm.textContent="More about me 💕";d.append(sm);
-  [["Full name","Emre Karoglu"],["Studies","BSc in Computer Science with Foundation Year"],["Favourite food","Pizza Margherita 🍕"],["Eyes","Hazel"],["Hair","Light brown"],["Ethnicity","White"],["Lives","South Essex (Chafford Hundred)"],["Future","Living in the UK for life 🇬🇧"],["Outdoors","8-ball pool, badminton, paddleboarding"]].forEach(([k,v])=>{const r=el("p","pr"),a=el("b",null,k+": ");r.append(a,v);d.append(r)});
+  [["Full name","Emre Karoglu"],["Studies","BSc in Computer Science with Foundation Year"],["Favourite food","Pizza Margherita 🍕"],["Health","No allergies, and no long-term illness in my family"],["Eyes","Hazel"],["Hair","Light brown"],["Ethnicity","White"],["Lives","South Essex (Chafford Hundred)"],["Future","Living in the UK for life 🇬🇧"],["Outdoors","8-ball pool, badminton, paddleboarding"]].forEach(([k,v])=>{const r=el("p","pr"),a=el("b",null,k+": ");r.append(a,v);d.append(r)});
   d.append(el("p","hint","I value honesty, loyalty and kindness, I hope for one lasting marriage, and I love quiet weekends at home. Attraction matters to me, but so do trust, communication, compatibility and respect 💕"));
   box.append(w,d);return box;
 }
